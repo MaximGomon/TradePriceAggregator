@@ -1,0 +1,20 @@
+version: '3.4'
+
+services:
+  scenario.resolver:
+    image: cw.scenario.resolver.web
+    container_name: scenario.resolver
+    build:
+      context: .
+      dockerfile: CW.Scenario.Resolver.Web/Dockerfile
+  
+  scenario.database:
+    image: postgres:15
+    container_name: cw.scenario.database
+    environment:
+      POSTGRES_DB: "scenariodb"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "password"
+    ports:
+      - "5432:5432"
+      
