@@ -7,16 +7,23 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Commands\" />
     <Folder Include="Handlers\" />
     <Folder Include="Clients\" />
-    <Folder Include="Models\" />
     <Folder Include="Contracts\" />
     <Folder Include="Processors\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.1.1" />
+    <PackageReference Include="MediatR.Contracts" Version="2.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PriceAggregator.Common.Extensions\PriceAggregator.Common.Extensions.csproj" />
+    <ProjectReference Include="..\PriceAggregator.Data.Context\PriceAggregator.Data.Context.csproj" />
   </ItemGroup>
 
 </Project>

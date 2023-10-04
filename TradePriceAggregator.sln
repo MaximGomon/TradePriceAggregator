@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PriceAggregator.Data.Contex
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PriceAggregator.Common.Processor", "PriceAggregator.Common.Processor\PriceAggregator.Common.Processor.csproj", "{D1F3C236-6936-4419-BC3B-E8884FD837FC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PriceAggregator.Common.Extensions", "PriceAggregator.Common.Extensions\PriceAggregator.Common.Extensions.csproj", "{DADD7306-5F08-45ED-BDD5-359660A71619}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{D1F3C236-6936-4419-BC3B-E8884FD837FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1F3C236-6936-4419-BC3B-E8884FD837FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1F3C236-6936-4419-BC3B-E8884FD837FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DADD7306-5F08-45ED-BDD5-359660A71619}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DADD7306-5F08-45ED-BDD5-359660A71619}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DADD7306-5F08-45ED-BDD5-359660A71619}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DADD7306-5F08-45ED-BDD5-359660A71619}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -38,6 +44,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{6F827226-80BA-45C8-AE6F-C3D10235B075} = {A1E5DAD2-3633-4712-A10D-8E0AA0F4ABFF}
 		{D1F3C236-6936-4419-BC3B-E8884FD837FC} = {A759979A-CCC0-4E54-9B09-131B07E9606B}
+		{DADD7306-5F08-45ED-BDD5-359660A71619} = {A759979A-CCC0-4E54-9B09-131B07E9606B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AB4814C8-A847-4A87-A7B8-36223A2BA5D4}

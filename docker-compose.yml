@@ -1,18 +1,22 @@
-version: '3.4'
-
+version: '1.0'
 services:
-  scenario.resolver:
-    image: cw.scenario.resolver.web
-    container_name: scenario.resolver
+  trade.aggregator:
+    image: TradePriceAggregator
+    container_name: trade.aggregator
     build:
       context: .
-      dockerfile: CW.Scenario.Resolver.Web/Dockerfile
-  
-  scenario.database:
-    image: postgres:15
-    container_name: cw.scenario.database
+      dockerfile: TradePriceAggregator/Dockerfile
     environment:
-      POSTGRES_DB: "scenariodb"
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "5100:80"
+  
+  trade.database:
+    image: postgres:15
+    container_name: trade.database
+    environment:
+      POSTGRES_DB: "tradedb"
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "password"
     ports:

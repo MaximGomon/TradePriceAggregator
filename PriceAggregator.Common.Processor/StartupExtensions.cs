@@ -1,4 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using PriceAggregator.Common.Processor.Clients;
+using PriceAggregator.Common.Processor.Commands.ReadCandleClosePriceCommand;
+using PriceAggregator.Common.Processor.Contracts;
+using PriceAggregator.Common.Processor.Handlers;
+using PriceAggregator.Common.Processor.Models;
+using PriceAggregator.Common.Processor.Processors;
 
 namespace PriceAggregator.Common.Processor
 {
@@ -6,6 +12,14 @@ namespace PriceAggregator.Common.Processor
     {
         public static IServiceCollection AddProcessors(this IServiceCollection services)
         {
+            services.AddTransient<IHandlerResolver, HandlerResolver>();
+
+            services.AddTransient<IExchangeHttpClient<TradeRequestParameter, BitstampPrice>, BitstampHttpClient>();
+
+            services.AddTransient<IReadCandleClosePriceCommandHandler, ReadCandleClosePriceCommandHandler>();
+
+            services.AddTransient<IDataAggregationProcessor, DataAggregationProcessor>();
+
             return services;
         }
 

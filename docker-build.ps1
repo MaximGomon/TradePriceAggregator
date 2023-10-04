@@ -1,1 +1,1 @@
-docker-compose -f docker-compose.yml -f docker-compose.override.yml -f docker-compose.override.windows.yml up --build --force-recreate
+docker-compose -f docker-compose.yml up --build --force-recreate

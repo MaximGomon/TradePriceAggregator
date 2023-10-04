@@ -6,4 +6,11 @@ public class TradePrice : KeyEntity
 {
     [Required]
     public decimal Price { get; set; }
+    
+    [Required]
+    public DateTime Time { get; set; }
+
+    [Required]
+    [MaxLength(50)]
+    public string Candle { get; set; }
 }

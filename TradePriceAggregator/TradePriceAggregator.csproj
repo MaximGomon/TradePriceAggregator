@@ -16,4 +16,13 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PriceAggregator.Common.Processor\PriceAggregator.Common.Processor.csproj" />
+    <ProjectReference Include="..\PriceAggregator.Data.Context\PriceAggregator.Data.Context.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
 </Project>

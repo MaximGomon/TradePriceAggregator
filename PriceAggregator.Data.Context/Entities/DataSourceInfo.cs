@@ -2,7 +2,7 @@
 
 namespace PriceAggregator.Data.Context.Entities;
 
-public class DataSources : KeyEntity
+public class DataSourceInfo : KeyEntity
 {
     [Required]
     public int Number { get; set; }
@@ -14,6 +14,9 @@ public class DataSources : KeyEntity
     [Required]
     [MaxLength(100)]
     public string HandlerName { get; set; }
+    
+    [Required]
+    public int Step { get; set; }
 
     [Required]
     [MaxLength(1000)]
