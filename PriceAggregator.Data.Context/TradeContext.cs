@@ -7,6 +7,7 @@ namespace PriceAggregator.Data.Context
     {
         public TradeContext(DbContextOptions<TradeContext> options) : base(options)
         {
+            //Database.Migrate();
         }
 
         public DbSet<DataSourceInfo> DataSources { get; set; }

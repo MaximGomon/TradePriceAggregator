@@ -9,4 +9,15 @@ public static class IntExtensions
 
         return systemDate.TrimMinutesAndLess();
     }
+
+    public static string SecondToBitfinexTime(this int second)
+    {
+        switch (second)
+        {
+            case 3600:
+                return "1h";
+            default:
+                return second.ToString();
+        }
+    }
 }

@@ -9,7 +9,7 @@ namespace PriceAggregator.Data.Context.Extensions
         public static IServiceCollection AddTradeDbContext(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<TradeContext>(options =>
-                options.UseNpgsql(configuration.GetValue<string>("ConnectionStrings::TradeDb")));
+                options.UseNpgsql(configuration.GetConnectionString("TradeDb")));
 
             return services;
         }

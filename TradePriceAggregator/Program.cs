@@ -1,5 +1,6 @@
 using Microsoft.Net.Http.Headers;
 using PriceAggregator.Common.Processor;
+using PriceAggregator.Common.Processor.Commands.ReadCandleClosePriceCommand;
 using PriceAggregator.Data.Context;
 using PriceAggregator.Data.Context.Extensions;
 using PriceAggregator.Data.Context.Seeds;
@@ -14,12 +15,16 @@ builder.Services.AddControllers();
 builder.Services.AddHttpClient();
 builder.Services.AddMemoryCache();
 builder.Services.AddResponseCaching();
+builder.Services.AddMediatR(config => config.RegisterServicesFromAssembly(typeof(IReadCandleClosePriceCommandHandler).Assembly));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
 
 if (builder.Environment.IsDevelopment())
 {

@@ -4,5 +4,5 @@ namespace PriceAggregator.Common.Processor.Contracts;
 
 public interface IDataAggregationProcessor
 {
-    Task<TradePrice> ProcessData(List<TradePrice> items);
+    Task<List<TradePrice>> ProcessData(List<TradePrice> items);
 }

@@ -13,8 +13,11 @@ namespace PriceAggregator.Common.Processor
         public static IServiceCollection AddProcessors(this IServiceCollection services)
         {
             services.AddTransient<IHandlerResolver, HandlerResolver>();
+            services.AddTransient<IExchangeHandler, BitfinexExchangeHandler>();
+            services.AddTransient<IExchangeHandler, BitstampExchangeHandler>();
 
             services.AddTransient<IExchangeHttpClient<TradeRequestParameter, BitstampPrice>, BitstampHttpClient>();
+            services.AddTransient<IExchangeHttpClient<TradeRequestParameter, List<BitfinexPrice>>, BitfinexHttpClient>();
 
             services.AddTransient<IReadCandleClosePriceCommandHandler, ReadCandleClosePriceCommandHandler>();
 

@@ -26,19 +26,21 @@ namespace TradePriceAggregator.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("{candle}/{time:int}/close")]
-        [ProducesResponseType(typeof(CandleClosePrice), StatusCodes.Status200OK)]
+        [HttpGet("{candle}/{start:int}/{end:int}/close")]
+        [ProducesResponseType(typeof(List<CandleClosePrice>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> GetTradePrice(CandleType candle, int time)
+        public async Task<IActionResult> GetTradePrice(CandleType candle, int start, int end)
         {
-            if (time <= 0)
+            if (start <= 0 || end <= 0 || end <= start)
                 return BadRequest("Wrong timestamp");
 
-            var dateTime = time.EpochToSystemTime();
+            var startTime = start.EpochToSystemTime();
+            var endTime = end.EpochToSystemTime();
+            var key = $"{candle}_{startTime.ToEpochTime()}_{endTime.ToEpochTime()}";
 
-            if (_cache.TryGetValue($"{candle}_{dateTime.ToEpochTime()}", out CandleClosePrice price))
+            if (_cache.TryGetValue(key, out List<CandleClosePrice> price))
             {
                 return Ok(price);
             }
@@ -46,14 +48,16 @@ namespace TradePriceAggregator.Controllers
             var command = new ReadCandleClosePriceCommand()
             {
                 Candle = candle.ToString(),
-                Time = dateTime
+                Start = startTime,
+                End = endTime
             };
             var result = await _mediator.Send(command);
 
             if (result == null)
                 return NotFound("Data for this timestamp and candle was not found on the server");
 
-            _cache.Set($"{candle}_{dateTime.ToEpochTime()}", result, dateTime.TillEndOfCurrentHour());
+            var totalExpiration = startTime.TillEndOfCurrentHour();
+            _cache.Set(key, result, totalExpiration);
 
             return Ok(result);
         }

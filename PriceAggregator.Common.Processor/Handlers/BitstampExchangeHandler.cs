@@ -1,4 +1,5 @@
-﻿using PriceAggregator.Common.Processor.Contracts;
+﻿using PriceAggregator.Common.Extensions;
+using PriceAggregator.Common.Processor.Contracts;
 using PriceAggregator.Common.Processor.Models;
 using PriceAggregator.Data.Context.Entities;
 
@@ -19,29 +20,33 @@ public class BitstampExchangeHandler : IExchangeHandler
 
     public string Name { get; } = "Bitstamp";
 
-    public async Task<TradePrice> Handle(DateTime time, DataSourceInfo dataSourceInfo)
+    public async Task<List<TradePrice>> Handle(ReadDataRequest request, DataSourceInfo dataSourceInfo)
     {
         using var client = _httpClientFactory.CreateClient();
         var price = await _exchangeClient.MakeCall(client, new TradeRequestParameter()
         {
             BaseUrl = dataSourceInfo.Url,
             Step = dataSourceInfo.Step,
-            Time = time
+            Start = request.Start,
+            End = request.End,
+            Candle = request.Candle
         });
 
         if (!price.Data.TradeInfo.Any())
             throw new ArgumentOutOfRangeException(nameof(price), "Exchange haven`t information for such criteria");
 
-        if (int.TryParse(price.Data.TradeInfo.First().Close, out int parsedClose))
+        var result = new List<TradePrice>(price.Data.TradeInfo.Count);
+
+        foreach (var ohlc in price.Data.TradeInfo)
         {
-            var result = new TradePrice()
+            result.Add(new TradePrice()
             {
-                Time = time,
-                Price = (decimal) parsedClose
-            };
-            return result;
+                TimeStamp = int.Parse(ohlc.Timestamp),
+                Candle = request.Candle,
+                Price = int.Parse(ohlc.Close)
+            });
         }
 
-        throw new ArgumentException($"Can`t deserialize Close value \'{price.Data.TradeInfo.First().Close}\'");
+        return result;
     }
 }

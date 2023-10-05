@@ -25,44 +25,57 @@ public class ReadCandleClosePriceCommandHandler : IReadCandleClosePriceCommandHa
         _processor = processor;
     }
 
-    public async Task<CandleClosePrice> Handle(ReadCandleClosePriceCommand request, CancellationToken cancellationToken)
+    public async Task<List<CandleClosePrice>> Handle(ReadCandleClosePriceCommand request, CancellationToken cancellationToken)
     {
-        request.Time = request.Time.TrimMinutesAndLess();
+        request.Start = request.Start.TrimMinutesAndLess();
 
-        var price = _context.TradePrices.FirstOrDefault(x => x.Time == request.Time && x.Candle == request.Candle);
-        if (price != null)
+        //todo check if exists all records for each hour not for any hour
+        var prices = _context.TradePrices.Where(x => x.TimeStamp > request.Start.ToEpochTime() 
+                                                     && x.TimeStamp <= request.End.ToEpochTime() && x.Candle == request.Candle);
+        if (prices.Any())
         {
-            return new CandleClosePrice()
-            {
-                Candle = price.Candle,
-                Price = price.Price
-            };
+            return prices.Select(x => new CandleClosePrice()
+                {
+                    Candle = x.Candle,
+                    Price = x.Price,
+                    TimeStamp = x.TimeStamp
+                })
+                .ToList();
         }
 
         var dataSources = _context.DataSources.ToList();
-        var prices = new List<TradePrice>(dataSources.Count);
+        var result = new List<TradePrice>(dataSources.Count);
 
-        dataSources.ForEach(async x =>
+        foreach (var sourceInfo in dataSources)
         {
             try
             {
-                var handler = _handlerResolver.ResolveHandler(x.Name);
-                prices.Add(await handler.Handle(request.Time, x));
+                var handler = _handlerResolver.ResolveHandler(sourceInfo.Name);
+                var data = await handler.Handle(new ReadDataRequest()
+                {
+                    Candle = request.Candle,
+                    End = request.End,
+                    Start = request.Start
+                }, sourceInfo);
+
+                result.AddRange(data);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
             }
-        });
-
-        var resultPrice = await _processor.ProcessData(prices);
-        _context.TradePrices.Add(resultPrice);
+        }
+      
+        var resultPrices = await _processor.ProcessData(result);
+        _context.TradePrices.AddRange(resultPrices);
         await _context.SaveChangesAsync(cancellationToken);
 
-        return new CandleClosePrice()
-        {
-            Candle = resultPrice.Candle,
-            Price = resultPrice.Price
-        };
+        return resultPrices.Select(x => new CandleClosePrice()
+            {
+                Candle = x.Candle,
+                Price = x.Price,
+                TimeStamp = x.TimeStamp
+            })
+            .ToList();
     }
 }

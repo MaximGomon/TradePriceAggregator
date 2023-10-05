@@ -17,7 +17,9 @@ public class BitstampHttpClient : IExchangeHttpClient<TradeRequestParameter, Bit
 
     public async Task<BitstampPrice> MakeCall(HttpClient client, TradeRequestParameter parameter)
     {
-        var response = await client.GetAsync($"{parameter.BaseUrl}/{parameter.Candle.ToLowerInvariant()}/?step={parameter.Step}&limit=1&start={parameter.Time.ToEpochTime()}");
+        var response = await client.GetAsync($"{parameter.BaseUrl}/{parameter.Candle.ToLowerInvariant()}" +
+                                             $"/?step={parameter.Step}&start={parameter.Start.ToEpochTime()}" +
+                                             $"&end={parameter.End.ToEpochTime()}&limit={parameter.Limit}");
         var responseText = await response.Content.ReadAsStringAsync();
 
         if (!response.IsSuccessStatusCode)

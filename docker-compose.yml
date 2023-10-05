@@ -1,17 +1,25 @@
 version: '1.0'
-services:
+services:    
   trade.aggregator:
-    image: TradePriceAggregator
+    image: tradepriceaggregator
     container_name: trade.aggregator
     build:
       context: .
       dockerfile: TradePriceAggregator/Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:80
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ConnectionStrings__TradeDb=host=trade.database;port=5432;database=tradedb;username=postgres;password=password;
+    volumes:
+      - ${USERPROFILE}/.aspnet/https:/root/.aspnet/https:ro
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+
     ports:
       - "5100:80"
-  
+      - "5101:443"
+    depends_on:
+      - trade.database
+
   trade.database:
     image: postgres:15
     container_name: trade.database
@@ -21,4 +29,3 @@ services:
       POSTGRES_PASSWORD: "password"
     ports:
       - "5432:5432"
-      

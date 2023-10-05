@@ -4,4 +4,5 @@ public class CandleClosePrice
 {
     public decimal Price { get; set; }
     public string Candle { get; set; }
+    public int TimeStamp { get; set; }
 }

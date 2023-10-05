@@ -8,7 +8,7 @@ public class TradePrice : KeyEntity
     public decimal Price { get; set; }
     
     [Required]
-    public DateTime Time { get; set; }
+    public int TimeStamp { get; set; }
 
     [Required]
     [MaxLength(50)]
